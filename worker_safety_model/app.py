@@ -8,10 +8,15 @@ from ultralytics import YOLO
 import tempfile
 import uuid
 import logging
+import torch
+from ultralytics.nn.tasks import DetectionModel
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Configure safe globals for model loading
+torch.serialization.add_safe_globals([ultralytics.nn.tasks.DetectionModel])
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -49,8 +54,8 @@ if os.name != 'nt':  # Not Windows
 # Load models with error handling
 try:
     logger.info("Loading YOLO models...")
-    ppe_model = YOLO('yolov8s_custom.pt')
-    human_model = YOLO('yolov8n.pt')
+    ppe_model = YOLO('yolov8s_custom.pt', weights_only=True)
+    human_model = YOLO('yolov8n.pt', weights_only=True)
     logger.info("Models loaded successfully")
 except Exception as e:
     logger.error(f"Error loading models: {str(e)}")

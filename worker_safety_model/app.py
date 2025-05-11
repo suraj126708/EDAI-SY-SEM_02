@@ -4,11 +4,11 @@ from werkzeug.utils import secure_filename
 import os
 import cv2
 import numpy as np
-from ultralytics import YOLO
 import tempfile
 import uuid
 import logging
 import torch
+from ultralytics import YOLO
 from ultralytics.nn.tasks import DetectionModel
 
 # Configure logging
@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configure safe globals for model loading
-torch.serialization.add_safe_globals([ultralytics.nn.tasks.DetectionModel])
+torch.serialization.add_safe_globals([DetectionModel])
 
 app = Flask(__name__)
 CORS(app, resources={
